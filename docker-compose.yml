@@ -1,0 +1,77 @@
+version: "3.2"
+services:
+  php:
+    build: 
+      context: '${PROJECT_ROOT}/docker/php/'
+      args:
+       PHP_VERSION: ${PHP_VERSION}
+    networks:
+      - backend
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: php
+
+  composer:
+    build: 
+      context: '${PROJECT_ROOT}/docker/composer/'
+      args:
+       COMPOSER_VERSION: ${COMPOSER_VERSION}
+    networks:
+      - backend
+    ports:
+      - "9001:9000"
+    volumes:
+      - ${PROJECT_ROOT}/docker/composer/:/composer
+    command: install
+    working_dir: /composer
+    container_name: composer
+
+  apache:
+    build:
+      context: '${PROJECT_ROOT}/docker/apache/'
+      args:
+       APACHE_VERSION: ${APACHE_VERSION}
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "80:80"
+    volumes:
+      - ${PROJECT_ROOT}/:/var/www/html/
+    container_name: apache
+
+  mysql:
+    image: mysql:${MYSQL_VERSION:-latest}
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+            - data:/var/lib/mysql
+    networks:
+      - backend
+    environment:
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${DB_NAME}"
+      MYSQL_USER: "${DB_USERNAME}"
+      MYSQL_PASSWORD: "${DB_PASSWORD}"
+    container_name: mysql
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    networks:
+      - backend
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+    data:

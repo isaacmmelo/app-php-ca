@@ -1,0 +1,27 @@
+{
+    "name": "isaac/sigmag-ca",
+    "description": "SIGMAG - Gestão Predial",
+    "type": "project",
+    "license": "dev",
+    "autoload": {
+        "psr-4": {
+            "Isaac\\SigmagCa\\docker\\composer\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Isaac Mendes",
+            "email": "isaac.melo@proton.me"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "twig/twig": "4.x-dev",
+        "guzzlehttp/psr7": "3.0.x-dev",
+        "php-di/php-di": "dev-master",
+        "nikic/fast-route": "^2.0@dev",
+        "httpsoft/http-runner": "dev-master",
+        "doctrine/dbal": "5.0.x-dev",
+        "v.chetkov/php-clean-architecture": "dev-master"
+    }
+}
