@@ -1,4 +1,5 @@
 version: "3.2"
+
 services:
   php:
     build: 
@@ -8,7 +9,9 @@ services:
     networks:
       - backend
     volumes:
-      - ${PROJECT_ROOT}/:/var/www/html/
+      - ${PROJECT_ROOT}/src/backend/:/var/www/html/
+    ports:
+      - "8081:8000"
     container_name: php
 
   composer:
@@ -38,9 +41,9 @@ services:
       - frontend
       - backend
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
-      - ${PROJECT_ROOT}/:/var/www/html/
+      - ${PROJECT_ROOT}/src/frontend/:/var/www/html/
     container_name: apache
 
   mysql:
@@ -63,7 +66,7 @@ services:
     image: phpmyadmin
     restart: always
     ports:
-      - 8081:80
+      - 8083:80
     environment:
       - PMA_ARBITRARY=1
     networks:
